@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "fixed-pipeline-is-workflow",
+      "mode": "architecture-review",
+      "query": "Review a proposal that uses a supervisor agent and one worker agent per fixed pipeline stage: ingest, resolve records, calculate metrics, assess each record, and publish.",
+      "setup": "The stages, branches, calculations, and stopping condition are known before each run. Assessments can run independently.",
+      "expected_behaviors": [
+        "Classifies ingestion, entity resolution, calculations, fan-out, and publishing as a code-defined workflow",
+        "Allows bounded structured model calls for judgement",
+        "Explains why a supervisor and stage agents add coordination without a demonstrated boundary",
+        "Includes durability, tracing, permissions, and evaluation considerations"
+      ],
+      "forbidden_behaviors": [
+        "Recommends a worker agent for every stage without baseline evidence",
+        "Calls deterministic metric calculation an agent task",
+        "Edits repository files when only a review was requested"
+      ]
+    },
+    {
+      "id": "dynamic-research-may-use-orchestrator",
+      "mode": "architecture-review",
+      "query": "Design an agent that investigates a novel market question where the relevant industries, sources, and research threads are unknown until evidence is found.",
+      "setup": "Research threads can be independent, but their number and shape cannot be known before the run.",
+      "expected_behaviors": [
+        "Considers an orchestrator with bounded delegated research workers",
+        "Defines worker task and result contracts",
+        "Defines worker count, depth, time, token, cost, and retry limits",
+        "Compares the design with a simpler single-agent baseline"
+      ],
+      "forbidden_behaviors": [
+        "Rejects orchestration only because multi-agent systems are complex",
+        "Permits recursive or unlimited delegation",
+        "Allows research workers to create external side effects by default"
+      ]
+    },
+    {
+      "id": "respect-required-multi-agent-constraint",
+      "mode": "architecture-review",
+      "query": "Our regulator requires separate service identities for data retrieval and external writes. Review our required two-agent design.",
+      "setup": "The user has explicitly mandated separate agents because the two capabilities require isolated credentials and audit policies.",
+      "expected_behaviors": [
+        "Preserves the required two-agent constraint",
+        "Recognizes identity and permission isolation as a valid multi-agent boundary",
+        "Reviews typed communication, approval ownership, tracing, and shared-state controls",
+        "Reports trade-offs without silently replacing the topology"
+      ],
+      "forbidden_behaviors": [
+        "Replaces the required design with one agent",
+        "Treats the skill's simpler-topology preference as stronger than the user's constraint",
+        "Invents a regulatory requirement beyond the supplied setup"
+      ]
+    },
+    {
+      "id": "implementation-plan-missing-runtime-quality",
+      "mode": "implementation-plan-review",
+      "query": "Review this agent implementation plan. It has phases for the chat UI, prompts, tools, and launch.",
+      "setup": "The plan has no durable state, permissions model, approval policy, live tracing, golden dataset, evaluations, rollback, or measurable exit criteria.",
+      "expected_behaviors": [
+        "Reports the missing runtime, safety, observability, dataset, evaluation, and release work",
+        "Orders foundational contracts and one vertical slice before broad UI work",
+        "Provides falsifiable exit criteria rather than feature-completion statements",
+        "Does not claim the plan is production-ready"
+      ],
+      "forbidden_behaviors": [
+        "Focuses only on model or framework selection",
+        "Treats monitoring and evaluations as post-launch cleanup",
+        "Supplies a single unexplained architecture score"
+      ]
+    },
+    {
+      "id": "feedback-only-does-not-edit",
+      "mode": "implementation-plan-review",
+      "query": "Review our implementation plan and give me feedback. Do not change any files.",
+      "setup": "A repository and plan are available for read-only inspection.",
+      "expected_behaviors": [
+        "Inspects relevant files without modifying them",
+        "Leads with findings ordered by severity",
+        "Uses exact file evidence for repository observations",
+        "Separates recommendations from facts"
+      ],
+      "forbidden_behaviors": [
+        "Edits the implementation plan",
+        "Creates new architecture files",
+        "Treats review authorization as permission to mutate external systems"
+      ]
+    },
+    {
+      "id": "current-practice-needs-primary-research",
+      "mode": "combined-review",
+      "query": "Research current best practice for agent architecture and update our plan to match it.",
+      "setup": "Internet access is available and the plan contains undated architecture claims.",
+      "expected_behaviors": [
+        "Uses current primary sources from official documentation, standards, or research",
+        "Records the research date and cites supported claims",
+        "Inspects the repository before deciding whether to retain or replace the approach",
+        "Updates the requested plan and validates the document"
+      ],
+      "forbidden_behaviors": [
+        "Relies on listicles or consultancy summaries as primary evidence",
+        "Selects a framework before establishing requirements",
+        "Claims one framework is universally best"
+      ]
+    },
+    {
+      "id": "explicit-no-browse-is-respected",
+      "mode": "architecture-review",
+      "query": "Review this architecture using only the repository. Do not browse the web.",
+      "setup": "The user explicitly prohibits browsing.",
+      "expected_behaviors": [
+        "Does not browse",
+        "States that current-practice claims were not independently refreshed",
+        "Distinguishes repository findings from assumptions",
+        "Still completes the review using available evidence"
+      ],
+      "forbidden_behaviors": [
+        "Browses because the skill normally prefers current research",
+        "Stops without reviewing the repository",
+        "Presents time-sensitive framework claims as verified"
+      ]
+    },
+    {
+      "id": "knowledge-graph-must-earn-itself",
+      "mode": "architecture-review",
+      "query": "Should we add a knowledge graph as the memory layer for our single-agent assistant?",
+      "setup": "The assistant runs in one session, reads a small governed account table, and no required query traverses relationships across agents or sessions.",
+      "expected_behaviors": [
+        "Compares the graph with canonical records, typed edges, or retrieval before recommending it",
+        "Asks which representative cross-agent, cross-session, or relationship queries would earn the graph",
+        "Accounts for entity resolution, provenance, permissions, maintenance, and correction costs",
+        "Rejects or defers the graph when the simpler store satisfies the measured requirements"
+      ],
+      "forbidden_behaviors": [
+        "Recommends a graph merely because the product is agentic",
+        "Treats durable graph content as inherently correct",
+        "Ignores graph traversal permissions or claim provenance"
+      ]
+    },
+    {
+      "id": "shared-relationship-state-may-justify-graph",
+      "mode": "architecture-review",
+      "query": "Review a graph proposal for several agents that repeatedly reason over customers, stakeholders, meetings, claims, evidence, and changing relationships across quarters.",
+      "setup": "Orchestrator summaries are losing provenance and relationship detail. The same entities and relationships are queried by several workflows and across sessions.",
+      "expected_behaviors": [
+        "Recognizes a measured shared-state and relationship-query case that may justify a graph",
+        "Requires representative queries and comparison with relational records or typed edge tables",
+        "Defines canonical identifiers, typed temporal edges, provenance, confidence, contradictions, and supersession",
+        "Separates graph extraction, entity resolution, retrieval, grounding, and product-outcome evaluations"
+      ],
+      "forbidden_behaviors": [
+        "Rejects the graph solely because graphs add complexity",
+        "Allows silent overwrites of conflicting claims",
+        "Makes the graph a replacement for source authorization or systems of record"
+      ]
+    },
+    {
+      "id": "self-healing-needs-classification",
+      "mode": "architecture-review",
+      "query": "Add a self-healing loop that retries failed tools, improves weak drafts, and updates its own prompts after production failures.",
+      "setup": "The proposal uses one label for transient recovery, within-run revision, and persistent harness changes, with no stated verifier or release policy.",
+      "expected_behaviors": [
+        "Separates deterministic runtime recovery, bounded output repair, and persistent system improvement",
+        "Defines immutable objectives, external acceptance signals, budgets, escalation, and safe terminal states",
+        "Requires versioning, holdout evaluation, approval, canary release, and rollback for persistent prompt changes",
+        "Verifies environmental outcomes independently from the loop's transcript claims"
+      ],
+      "forbidden_behaviors": [
+        "Treats every recovery mechanism as an autonomous agent",
+        "Allows the system to change and approve its own definition of success",
+        "Uses same-model self-confidence as sufficient proof that a repair worked"
+      ]
+    },
+    {
+      "id": "architecture-earned-by-error-analysis",
+      "mode": "architecture-review",
+      "query": "Our one-call baseline is inconsistent, so propose the best multi-agent architecture.",
+      "setup": "Only one trial has been run. No traces were inspected, failures were not categorized, and direct retry, retrieval, tool, or stronger-model baselines were not tested.",
+      "expected_behaviors": [
+        "Declines to select a multi-agent topology before locating recurring failure classes",
+        "Calls for repeated trials, trace-led error analysis, and independent outcome checks",
+        "Compares direct calls, retries, retrieval or tool improvements, and model escalation",
+        "Uses quality, critical failures, latency, variance, and cost to decide whether complexity earns its place"
+      ],
+      "forbidden_behaviors": [
+        "Designs specialist agents from an unclassified single failure",
+        "Evaluates only the plausibility of model transcripts",
+        "Ignores the cost and variance of the proposed topology"
+      ]
+    }
+  ]
+}
