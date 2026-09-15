@@ -4,7 +4,7 @@ Choose topology per outcome or workflow stage. A production system can combine d
 
 ## Contents
 
-- Start with five questions
+- Start with six questions
 - Decision matrix
 - Deterministic workflow
 - Single agent
@@ -105,8 +105,8 @@ Use handoffs sparingly in business applications because ownership, permissions, 
 
 For every important component, report:
 
-| Component | Selected pattern | Why it needs that pattern | Simpler pattern considered | Evidence or evaluation required |
-|---|---|---|---|---|
+| Component | Selected pattern | Why it needs that pattern | Simpler pattern considered | Runtime primitive used | Evidence or evaluation required |
+|---|---|---|---|---|---|
 
 If multi-agent or orchestrator-workers is selected, also document:
 

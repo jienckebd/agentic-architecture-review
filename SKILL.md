@@ -50,6 +50,14 @@ An agent is justified when the path cannot be usefully specified in advance and 
 
 Start with the least complex topology that can pass the evaluation set. Prefer sequential or parallel workflow control in code when the graph is known. Cap evaluator revision loops. Do not default to recursive delegation or unbounded planning. If the user's requirements genuinely need recursive delegation, define and test strict limits for depth, breadth, permissions, time, tokens, and spend.
 
+## Prefer maintained primitives over hand-rolled infrastructure
+
+Before accepting any hand-written checkpointing, replay cache, interrupt or approval pause, retry policy, concurrency cap, tracing, or structured-output validation, list the maintained primitive that provides it. Check the repository's existing dependencies first; a runtime already in the lockfile is not a "new framework". Then record a primitive ledger (format in the rubric) that names, for each capability: the primitive, its adoption cost, the hand-rolled cost, and the features the hand-rolled version drops. Decide from both columns. A narrative about framework tax, or a passing recovery test, is one column, not a decision.
+
+Hand-rolling is the right answer when the ledger shows it: no resume, interrupt, or branching requirement; a rerun-from-scratch cost below the primitive's operating cost; or a measured incompatibility such as a second database driver. State that condition and the observable trigger that would reverse it.
+
+Duplicated wrappers, one persistence path per stage, and infrastructure copied between services are code-shape findings. Report them with the count and ask for one path per concern.
+
 Read [references/topology-decision.md](references/topology-decision.md) whenever the review must choose among a workflow, single agent, multi-agent system, handoff, or orchestrator with delegated workers. Apply the decision tests and state the trade-off or evidence behind patterns that were not selected.
 
 Read [references/verification-and-evaluation.md](references/verification-and-evaluation.md) when deciding whether autonomy or architectural complexity is justified. Require trace-led error analysis, repeated trials for stochastic behaviour, independent outcome checks, and comparison with simple cost-controlled baselines. The strength of the verifier limits the safe autonomy of the loop.
@@ -60,18 +68,18 @@ Read [references/adaptive-recovery.md](references/adaptive-recovery.md) when a p
 
 ## Review the whole operating system
 
-Read [references/review-rubric.md](references/review-rubric.md) and assess every applicable section. The review is incomplete if it covers topology but omits data truth, durable state, permissions, live tracing, the golden dataset, evaluations, or production operations.
+Read [references/review-rubric.md](references/review-rubric.md) and assess every applicable section. The review is incomplete if it covers topology but omits data truth, durable state, code shape, permissions, live tracing, the golden dataset, evaluations, or production operations.
 
 For implementation plans, confirm that architectural promises appear as owned build work with dependencies, deliverables, release gates, and observable exit criteria. “Add evals later” and “monitor in production” are not implementation steps.
 
 ## Produce a decision, not a catalogue
 
-Lead with the recommended architecture and whether the current approach should be retained, revised, or replaced. Include:
+Lead with the recommended architecture and whether the current approach should be retained, revised, or replaced. Order findings by severity, highest first. Include:
 
 1. Product and constraint summary.
 2. Current-state findings supported by repository evidence.
 3. Component classification and topology decision.
-4. Target architecture and state boundaries.
+4. Target architecture, state boundaries, and the runtime primitive ledger.
 5. Safety, approval, tracing, golden-data, and evaluation design.
 6. Implementation-plan gaps and ordered changes.
 7. Decisions that require a named business or technical owner.

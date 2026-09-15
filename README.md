@@ -24,6 +24,8 @@ Two principles do most of the work:
 
 It also periodically asks the unpopular question: has a model or tool improvement made some of this scaffolding deletable?
 
+The same rule runs the other way for infrastructure. Before it accepts hand-written checkpointing, replay, interrupts, retries, or tracing, it asks for a **runtime primitive ledger**: the maintained primitive that already does the job (checking the lockfile first, since a runtime already in the repo is not a "new framework"), what adopting it costs, what hand-rolling costs, and which features the hand-rolled version quietly dropped. Hand-rolling is allowed when the ledger shows it, for example when nothing needs to resume or a second database driver would be the price. Three copies of one wrapper differing by a stage label is a code-shape finding, not a runtime.
+
 ## Three modes
 
 | Mode | Use for |
@@ -84,7 +86,7 @@ references/verification-and-evaluation.md whether autonomy and complexity are ea
 references/knowledge-state-and-tools.md   durable knowledge, state, tools, graph decisions
 references/adaptive-recovery.md           self-healing, reflection, cross-run learning
 references/review-rubric.md               the full section-by-section rubric
-evals/cases.json                          11 behavioural test cases
+evals/cases.json                          14 behavioural test cases
 scripts/validate_skill.py                 fixture, navigation, and parity checks
 ```
 
@@ -92,7 +94,7 @@ References load on demand rather than all at once, so the context cost scales wi
 
 ## Evals
 
-`evals/cases.json` holds 11 behavioural cases covering the failure modes that matter: recommending a workflow where a supervisor plus one worker per fixed stage was proposed, allowing an orchestrator where the specialists genuinely cannot be known in advance, respecting a mandated multi-agent constraint, catching an implementation plan with no runtime quality work, not editing files when only feedback was asked for, not browsing when told not to, making a knowledge graph earn itself, and refusing to answer "our baseline is inconsistent, so propose a multi-agent architecture" with an architecture instead of error analysis.
+`evals/cases.json` holds 14 behavioural cases covering the failure modes that matter: recommending a workflow where a supervisor plus one worker per fixed stage was proposed, allowing an orchestrator where the specialists genuinely cannot be known in advance, respecting a mandated multi-agent constraint, catching an implementation plan with no runtime quality work, not editing files when only feedback was asked for, not browsing when told not to, making a knowledge graph earn itself, refusing to answer "our baseline is inconsistent, so propose a multi-agent architecture" with an architecture instead of error analysis, naming the runtime checkpointer a replacement service hand-rolled around, declining to add a workflow runtime to a job that reruns from scratch in a minute, and fixing context assembly before splitting one degrading agent into three.
 
 Each case carries `expected_behaviors` and `forbidden_behaviors`. Run them with and without the skill, on each model and surface you care about. Forward tests only. Reading the cases is not running them.
 

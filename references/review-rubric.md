@@ -8,6 +8,8 @@ Use the applicable sections for architecture reviews and implementation-plan rev
 - Component boundaries
 - Data, evidence, and memory
 - Runtime and recovery
+- Runtime primitive ledger
+- Code shape
 - Permissions and side effects
 - Live tracing and operations
 - Golden dataset
@@ -66,6 +68,29 @@ Use the applicable sections for architecture reviews and implementation-plan rev
 - Previous good results remain available when refresh fails and are marked stale.
 - Concurrency, source rate limits, dead letters, cancellation, and backpressure are covered.
 - A runtime choice is proven with pause, restart, replay, and duplicate-write tests.
+- Hand-written checkpointing, replay, interrupt, retry, concurrency, or tracing code is **partial** until the primitive ledger names the maintained primitive considered and the measured reason it was rejected.
+- Features the maintained primitive provided and the hand-rolled path dropped are listed and either rebuilt or accepted by name.
+- A decision record that names a runtime matches the code that runs; a contradiction is reported before either is rewritten.
+- Prompts, tool schemas, policies, and model snapshots are versioned; the version is part of every replay key and span, so a mid-run change cannot replay stale output unnoticed.
+
+## Runtime primitive ledger
+
+Fill one row per runtime capability the system needs. Check the repository's existing dependencies before treating a primitive as new.
+
+| Capability | Maintained primitive (in repo already?) | Adoption cost | Hand-rolled cost | Features dropped by hand-rolling | Decision and observable reversal trigger |
+|---|---|---|---|---|---|
+
+Capabilities to consider: durable checkpoint and resume, replay of completed steps, human-in-the-loop interrupt, retry policy, timeout and concurrency budget, trace and span propagation, structured-output validation, tool protocol.
+
+Skip a capability when the ledger shows no requirement for it: no resume, interrupt, or branching need, or rerun-from-scratch cost below the primitive's operating cost. Say so in the decision column.
+
+## Code shape
+
+- One persistence path per concern; wrappers or stores duplicated per stage are counted and consolidated.
+- Infrastructure copied between services is named as a shared dependency or deleted.
+- Each direct dependency has a stated reason; two drivers or two state stores for one concern are a finding.
+- Idempotency is enforced by a constraint or upsert, not by select-then-insert.
+- Serialization for cache or step keys is canonical and shared, not re-implemented per call site.
 
 ## Permissions and side effects
 
@@ -158,3 +183,7 @@ Use the applicable sections for architecture reviews and implementation-plan rev
 - A knowledge graph is proposed without representative cross-agent or cross-session queries that earn its cost.
 - The plan builds broad UI surfaces before proving one complete evidence-to-action path.
 - Multi-agent topology is selected before a single-agent or deterministic baseline exists.
+- A bespoke checkpoint table and replay wrapper sit beside a runtime checkpointer the repository already depends on.
+- Several copies of one wrapper differ only by stage label.
+- "No new frameworks" is treated as a requirement when the framework is already a dependency.
+- A workflow runtime is added to a job that reruns from scratch cheaply and has no pause or branching.

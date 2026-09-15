@@ -187,6 +187,57 @@
         "Evaluates only the plausibility of model transcripts",
         "Ignores the cost and variance of the proposed topology"
       ]
+    },
+    {
+      "id": "reuse-runtime-checkpointer-over-hand-rolled",
+      "mode": "architecture-review",
+      "query": "Review the durable-runtime choice for our replacement service. The old service uses a workflow runtime with a Postgres checkpointer. The replacement persists every model call in its own checkpoint table through three wrapper classes and says 'no new frameworks'.",
+      "setup": "The repository already depends on a maintained workflow runtime whose Postgres checkpointer provides resume, replay, interrupts, and thread state. The replacement's wrappers are copies of one another that differ only by stage label, and the accepted decision record names the runtime checkpointer.",
+      "expected_behaviors": [
+        "Names the maintained checkpointer already in the repository as the primitive the replacement rejected",
+        "Marks the hand-rolled checkpoint path partial or missing until a measured reason for rejecting the primitive is recorded",
+        "Flags the duplicated wrapper classes as a code-shape finding and asks for one persistence path per concern",
+        "Checks the decision record against the code and reports the contradiction"
+      ],
+      "forbidden_behaviors": [
+        "Endorses the bespoke checkpoint table because a recovery test passes",
+        "Rewrites the decision record to match the hand-rolled code without evidence",
+        "Treats 'no new frameworks' as a requirement when the framework is already a dependency"
+      ]
+    },
+    {
+      "id": "small-pipeline-does-not-need-runtime",
+      "mode": "architecture-review",
+      "query": "Should we add a workflow runtime with a checkpointer to our nightly summariser?",
+      "setup": "The service has no workflow framework dependency, makes one structured model call per record inside a cron job, has no approval pause, and reruns from scratch in under a minute if it fails.",
+      "expected_behaviors": [
+        "Compares the runtime against rerun-from-scratch and a small idempotent result table",
+        "Recommends against the runtime when no resume, interrupt, or branching requirement is present",
+        "States the observable condition that would justify adopting the runtime later",
+        "Keeps the recommendation proportional to the measured failure cost"
+      ],
+      "forbidden_behaviors": [
+        "Recommends the runtime because it is an industry standard",
+        "Adds a checkpointer to a job with no resume requirement",
+        "Treats framework adoption as a substitute for idempotent writes"
+      ]
+    },
+    {
+      "id": "context-assembly-before-topology-split",
+      "mode": "architecture-review",
+      "query": "Our single agent gets worse after about twenty tool calls, so we plan to split it into three specialist agents. Review the proposal.",
+      "setup": "Every tool result is appended verbatim to one growing message list. There is no compaction, no per-call token budget, and the system prompt is rebuilt each turn with the full history. Traces show quality drops as context length grows, not at any particular tool.",
+      "expected_behaviors": [
+        "Inspects what each model call's context contains and its token budget before judging the topology",
+        "Proposes compaction, bounded tool results, or context packets as the simpler candidate to test first",
+        "Treats context isolation as a valid reason for a split only when the simpler context fix is measured and insufficient",
+        "Requires prompt and configuration versions in traces so the comparison is attributable"
+      ],
+      "forbidden_behaviors": [
+        "Recommends the three-agent split without examining context assembly",
+        "Attributes the degradation to model capability or tool count without evidence",
+        "Ignores the token cost of the proposed topology"
+      ]
     }
   ]
 }
