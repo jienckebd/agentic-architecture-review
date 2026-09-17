@@ -4,6 +4,8 @@ Use the applicable sections for architecture reviews and implementation-plan rev
 
 ## Contents
 
+- Marking
+- Using the rubric as a gate
 - Product contract
 - Component boundaries
 - Data, evidence, and memory
@@ -16,6 +18,28 @@ Use the applicable sections for architecture reviews and implementation-plan rev
 - Evaluations
 - Implementation plan
 - Common failure patterns
+
+## Marking
+
+- **Satisfied:** the plan or architecture meets the bullet's requirement, and the mark cites the text that does.
+- **Partial:** part of the requirement is addressed and a named part is not.
+  - **Blocking** when the unaddressed part is an important architectural requirement with no concrete implementation work or exit criterion.
+  - **Advisory** when the requirement is covered in substance and the finding would only strengthen it.
+- **Missing:** nothing addresses the requirement.
+- **Not applicable:** the bullet's premise is absent from the system under review, such as no external writes, no retrieval, or no model-directed loop. Name the absent premise.
+- Mark against the bullet's own words. A bullet that lists several properties is partial only for a named property the text omits, not for a stronger version of one it covers.
+- A satisfied or not-applicable mark that cites nothing counts as missing.
+
+## Using the rubric as a gate
+
+When a plan must pass this rubric before approval, a model grader's marks are a stochastic signal, not a verdict. Fresh graders given unchanged text flag different partial bullets, so a bar of zero partial marks can loop without converging while each revision adds text for the next grader to find gaps in. Apply this rubric's own rule for critics: explicit criteria and a capped number of revisions.
+
+- Fix the graded bullets before the first round and keep them fixed. Widening or swapping the set restarts the evidence.
+- Mark with § Marking. Fail the gate only on a missing mark or a blocking partial, and record advisory partials in the plan as known residuals.
+- Before a single grader's verdict becomes a gate, grade unchanged text more than once. Treat a finding only one grader raises as advisory unless it names absent work.
+- Cap revision rounds; three is a sensible default. From the second round, give the grader the previous blocking findings and re-mark only those bullets, plus any bullet whose cited section changed.
+- Resolve a blocking finding with owned work, a dependency, or a falsifiable exit criterion, never with prose that restates the bullet.
+- When the cap is reached and blocking partials remain, stop revising. Hand each residual and the cost of fixing it to the decision owner.
 
 ## Product contract
 

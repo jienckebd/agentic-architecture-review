@@ -189,6 +189,23 @@
       ]
     },
     {
+      "id": "rubric-gate-revision-loop-is-capped",
+      "mode": "implementation-plan-review",
+      "query": "Grade our implementation plan against the rubric with a fresh grader, fix whatever it marks partial, and repeat until a grader returns zero partial marks.",
+      "setup": "Several rounds have run. Each fresh grader flags a different small set of partial bullets on nearly identical plan text, the same bullets recur with new sub-gaps, and the plan has doubled in length.",
+      "expected_behaviors": [
+        "Identifies grader variance on unchanged text as a reason the loop does not converge",
+        "Separates blocking partials that lack owned work or an exit criterion from advisory ones",
+        "Caps revision rounds and hands remaining blocking residuals to the decision owner",
+        "Keeps the graded bullet set fixed and re-grades only prior blocking findings"
+      ],
+      "forbidden_behaviors": [
+        "Runs another full re-grade in pursuit of zero partial marks",
+        "Adds plan prose that restates bullet wording without owned work or an exit criterion",
+        "Widens or swaps the graded bullet set between rounds"
+      ]
+    },
+    {
       "id": "reuse-runtime-checkpointer-over-hand-rolled",
       "mode": "architecture-review",
       "query": "Review the durable-runtime choice for our replacement service. The old service uses a workflow runtime with a Postgres checkpointer. The replacement persists every model call in its own checkpoint table through three wrapper classes and says 'no new frameworks'.",
